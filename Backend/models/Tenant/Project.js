@@ -20,6 +20,9 @@ const project = (sequelize) => {
         budget: {
             type: DataTypes.FLOAT
         },
+        clientId:{
+            type:DataTypes.INTEGER
+        },
         status: {
             type: DataTypes.ENUM('open', 'in-progress', 'completed', 'cancelled'),
             defaultValue: 'open'

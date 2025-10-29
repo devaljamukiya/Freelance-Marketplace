@@ -8,6 +8,8 @@ const contract = require("../models/Tenant/Contract");
 const payment = require("../models/Tenant/Payment");
 const setting = require("../models/Tenant/Setting");
 const role = require('../models/Tenant/role')
+const feature = require('../models/Tenant/feature')
+const rolePermission = require('../models/Tenant/rolePermission')
 
 const createTenantDb = async (companyName) => {
   const dbName = companyName.replace(/\s+/g, "_").toLowerCase();
@@ -31,6 +33,8 @@ const createTenantDb = async (companyName) => {
   const Contract = contract(tenantSequelize);
   const Payment = payment(tenantSequelize);
   const Setting = setting(tenantSequelize);
+  const Feature = feature(tenantSequelize)
+  const RolePermission = rolePermission(tenantSequelize)
 
   // associations
 
@@ -79,8 +83,23 @@ const createTenantDb = async (companyName) => {
   Payment.belongsTo(Contract, { foreignKey: 'contractId' });
 
 
+
+
+    // Role - Feature - RolePermission associations
+  Role.hasMany(RolePermission, { foreignKey: 'roleId', onDelete: 'CASCADE' });
+  RolePermission.belongsTo(Role, { foreignKey: 'roleId' });
+
+  Feature.hasMany(RolePermission, { foreignKey: 'featureId', onDelete: 'CASCADE' });
+  RolePermission.belongsTo(Feature, { foreignKey: 'featureId' });
+
+  Role.belongsToMany(Feature, { through: RolePermission, foreignKey: 'roleId' });
+  Feature.belongsToMany(Role, { through: RolePermission, foreignKey: 'featureId' });
+
+
+  
+
   //sync
-  await tenantSequelize.sync({ alter: true });
+  await tenantSequelize.sync({ alter: false });
 
   console.log(`✅ Tenant DB '${dbName}' synced successfully!`);
 
@@ -95,6 +114,8 @@ const createTenantDb = async (companyName) => {
     Contract,
     Payment,
     Setting,
+    Feature,
+    RolePermission
   };
 };
 

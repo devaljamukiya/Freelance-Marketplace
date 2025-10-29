@@ -26,13 +26,18 @@ app.use('/role',roleRoutes)
 const authroutes = require('./routes/Tenant/authRoutes')
 app.use('/auth',authroutes)
 
+const freelancer = require('./routes/Tenant/freelancerRoutes')
+app.use('/freelancer',freelancer)
+
+const client = require('./routes/Tenant/clientRoutes')
+app.use('/client',client)
+
+const projectRoutes = require('./routes/Tenant/projectRoutes')
+app.use('/project',projectRoutes)
+
 //database
 dbconnection()
 
 app.listen(PORT, async()=>{
      console.log(`Server running on http://localhost:${PORT}`)
 })
-
-
-//link
-//https://chatgpt.com/share/6900d77b-3918-8007-962c-5275907a620d
