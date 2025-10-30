@@ -10,6 +10,7 @@ const setting = require("../models/Tenant/Setting");
 const role = require('../models/Tenant/role')
 const feature = require('../models/Tenant/feature')
 const rolePermission = require('../models/Tenant/rolePermission')
+const message = require('../models/Tenant/Message')
 
 const createTenantDb = async (companyName) => {
   const dbName = companyName.replace(/\s+/g, "_").toLowerCase();
@@ -23,7 +24,7 @@ const createTenantDb = async (companyName) => {
     dialect: "mysql",
     logging: false,
   });
-  
+
   const Role = role(tenantSequelize)
   const User = user(tenantSequelize);
   const FreelancerProfile = freelancer(tenantSequelize);
@@ -35,11 +36,12 @@ const createTenantDb = async (companyName) => {
   const Setting = setting(tenantSequelize);
   const Feature = feature(tenantSequelize)
   const RolePermission = rolePermission(tenantSequelize)
+  const Message = message(tenantSequelize)
 
   // associations
 
   //user - role
-  Role.hasMany(User, { foreignKey: "roleId"});
+  Role.hasMany(User, { foreignKey: "roleId" });
   User.belongsTo(Role, { foreignKey: "roleId" });
 
   // user - freelancer
@@ -85,7 +87,7 @@ const createTenantDb = async (companyName) => {
 
 
 
-    // Role - Feature - RolePermission associations
+  // Role - Feature - RolePermission associations
   Role.hasMany(RolePermission, { foreignKey: 'roleId', onDelete: 'CASCADE' });
   RolePermission.belongsTo(Role, { foreignKey: 'roleId' });
 
@@ -96,7 +98,22 @@ const createTenantDb = async (companyName) => {
   Feature.belongsToMany(Role, { through: RolePermission, foreignKey: 'featureId' });
 
 
-  
+  //message association
+  //send message
+  User.hasMany(Message, { as: 'SentMessage', foreignKey: 'senderId' });
+  Message.belongsTo(User, { as: 'Sender', foreignKey: 'senderId' });
+
+  //receive message
+  User.hasMany(Message, { as: 'ReceiveMessage', foreignKey: 'receiverId' })
+  Message.hasMany(User, { as: 'Receive', foreignKey: 'receiverId' })
+
+  // A project can have many messages (discussion under a project)
+  Project.hasMany(Message, { foreignKey: 'projectId', });
+  Message.belongsTo(Project, { foreignKey: 'projectId' });
+
+  // // A contract can also have many messages
+  // Contract.hasMany(Message, { foreignKey: 'contractId', onDelete: 'CASCADE' });
+  // Message.belongsTo(Contract, { foreignKey: 'contractId' });
 
   //sync
   await tenantSequelize.sync({ alter: false });
@@ -115,7 +132,8 @@ const createTenantDb = async (companyName) => {
     Payment,
     Setting,
     Feature,
-    RolePermission
+    RolePermission,
+    Message
   };
 };
 

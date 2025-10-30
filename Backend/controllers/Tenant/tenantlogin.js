@@ -15,7 +15,7 @@ const tenantLogin = async (req, res) => {
         if(!match) return res.json({message:'invalid password'})
         
             
-        const token = jwt.sign({id:tenant.id,companyName:tenant.companyName,role:roleName},process.env.TOKEN_SECRET,{expiresIn:'1h'})
+        const token = jwt.sign({id:tenant.id,companyName:tenant.companyName},process.env.TOKEN_SECRET,{expiresIn:'1h'})
 
         res.status(201).json({message:'login succesful',token,tenant: {
         id: tenant.id,
