@@ -59,7 +59,7 @@ const userlogin = async (req, res) => {
 
         const { email, password, companyName } = req.body;
 
-        const { User, Role } = await createTenantDb(companyName);
+        const { User, Role,RolePermission } = await createTenantDb(companyName);
 
         const user = await User.findOne({ where: { email } });
         console.log(user);
@@ -69,9 +69,12 @@ const userlogin = async (req, res) => {
 
         const role = await Role.findByPk(user.roleId)
 
-        const token = jwt.sign({ id: user.id, email: user.email, companyName, roleId: role.id, roleName: role.name, }, process.env.TOKEN_SECRET, { expiresIn: "2h" });
+        const rolepermission = await RolePermission.findAll()
+        console.log(rolepermission);
+        
+        const token = jwt.sign({ id: user.id, email: user.email, companyName, roleId: role.id, roleName: role.name, rolepermission}, process.env.TOKEN_SECRET, { expiresIn: "2h" });
 
-        res.status(201).json({ message: 'user login succesfully', token })
+        res.status(201).json({ message: 'user login succesfully', token,rolepermission })
 
     }
     catch (error) {
