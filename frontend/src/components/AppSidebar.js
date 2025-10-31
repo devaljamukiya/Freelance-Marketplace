@@ -22,7 +22,7 @@ import navigation from '../_nav'
 const AppSidebar = () => {
   const dispatch = useDispatch()
   const unfoldable = useSelector((state) => state.sidebarUnfoldable)
-  const sidebarShow = useSelector((state) => state.sidebarShow)
+  const sidebarShow = useSelector((state) => state.ui.sidebarShow)
 
   return (
     <CSidebar
@@ -43,7 +43,8 @@ const AppSidebar = () => {
         <CCloseButton
           className="d-lg-none"
           dark
-          onClick={() => dispatch({ type: 'set', sidebarShow: false })}
+           onClick={() => dispatch(set({ sidebarShow: !sidebarShow })) }
+          
         />
       </CSidebarHeader>
       <AppSidebarNav items={navigation} />

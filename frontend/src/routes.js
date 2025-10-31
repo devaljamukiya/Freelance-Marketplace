@@ -1,8 +1,8 @@
 import React from 'react'
+import TenantList from './views/pages/CreateTenant/tenantList'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
-const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
-const Typography = React.lazy(() => import('./views/theme/typography/Typography'))
+const TenantRegister = React.lazy(() => import('./views/pages/CreateTenant/tenantcreate'))
 
 // Base
 const Accordion = React.lazy(() => import('./views/base/accordion/Accordion'))
@@ -54,9 +54,13 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
-  { path: '/theme', name: 'Theme', element: Colors, exact: true },
-  { path: '/theme/colors', name: 'Colors', element: Colors },
-  { path: '/theme/typography', name: 'Typography', element: Typography },
+  // { path: '/theme', name: 'Theme', element: Colors, exact: true },
+  { path: '/tenant', name: 'tenant', element: TenantList },
+
+  { path: '/tenant/create', name: 'tenant create', element: TenantRegister },
+  { path: '/plane', name: 'Colors', element: TenantList },
+
+
   { path: '/base', name: 'Base', element: Cards, exact: true },
   { path: '/base/accordion', name: 'Accordion', element: Accordion },
   { path: '/base/breadcrumbs', name: 'Breadcrumbs', element: Breadcrumbs },

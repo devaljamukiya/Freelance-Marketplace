@@ -72,7 +72,7 @@ const createTenant = async (req, res) => {
 
     await sendEmail(email, 'Your Tenant Verification Code', message);
 
-    res.status(201).json({
+    res.json({
       message: 'Tenant created. Verification code sent to email.',
     });
   } catch (error) {
@@ -133,9 +133,43 @@ const setPassword = async (req, res) => {
   }
 };
 
+
+//get all tenant
+const getAllTenants = async (req, res) => {
+  try {
+    const tenants = await Tenant.findAll({
+      include: [
+        {
+          model: Plane,
+          as: 'plan',
+          attributes: ['id', 'name', 'price', 'durationInDay', 'features', 'userLimit']
+        }
+      ],
+      attributes: { exclude: ['password', 'verificationCode', 'codeExpiresAt'] } // hide sensitive data
+    });
+
+    if (!tenants || tenants.length === 0) {
+      return res.status(404).json({ message: 'No tenants found' });
+    }
+
+    res.status(200).json({
+      message: 'Tenants fetched successfully',
+      tenants
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: 'Error fetching tenants',
+      error: error.message
+    });
+  }
+};
+
+
 module.exports = {
   MasterLogin,
   createTenant,
   verifyTenant,
-  setPassword
+  setPassword,
+  getAllTenants
 }

@@ -48,8 +48,25 @@ const deletePlane = async(req,res)=>{
         res.status(500).json({message:'error',error:error.message})
     }
 }
+
+const getAllPlanes = async (req, res) => {
+  try {
+    const planes = await Plane.findAll({
+      order: [["id", "ASC"]],
+    });
+
+    if (!planes || planes.length === 0)
+      return res.status(404).json({ message: "No planes found" });
+
+    res.status(200).json({ message: "Planes fetched successfully", planes });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching planes", error: error.message });
+  }
+};
+
 module.exports = {
     createPlane,
     updatePlane,
-    deletePlane
+    deletePlane,
+    getAllPlanes
 }

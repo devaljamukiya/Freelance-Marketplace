@@ -8,6 +8,7 @@ import {
   cilDescription,
   cilDrop,
   cilExternalLink,
+  cilMoney,
   cilNotes,
   cilPencil,
   cilPuzzle,
@@ -29,20 +30,55 @@ const _nav = [
   },
   {
     component: CNavTitle,
-    name: 'Theme',
+    name: 'Tenant',
   },
   {
     component: CNavItem,
-    name: 'Colors',
-    to: '/theme/colors',
+    name: 'Create Tenant',
+    to: '/tenant/create',
+    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Get All Tenant',
+    to: '/tenant',
     icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,
-    name: 'Typography',
-    to: '/theme/typography',
-    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+    name: 'Subscription Plane',
+    to: '/plane',
+    icon: <CIcon icon={cilMoney} customClassName="nav-icon" />,
   },
+  // {
+  //   component: CNavItem,
+  //   name: 'Create Tenant',
+  //   to: '/tenant/create',
+  //   icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+  // },
+    {
+    component: CNavTitle,
+    name: 'Plane',
+  },
+  {
+    component: CNavGroup,
+    name: 'Subscription Plane',
+    to: '/plane',
+    icon: <CIcon icon={cilMoney} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Create Plne',
+        to: '/base/accordion',
+      },
+      {
+        component: CNavItem,
+        name: 'Breadcrumb',
+        to: '/base/breadcrumbs',
+      },
+    ]
+  },
+
   {
     component: CNavTitle,
     name: 'Components',
