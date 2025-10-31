@@ -4,7 +4,7 @@ const { createPlane, updatePlane, deletePlane } = require('../../controllers/Mas
 const authMiddleware = require('../../middleware/authmiddleware')
 const router = express.Router()
 
-router.get('/',MasterLogin)
+router.post('/',MasterLogin)
 
 //subscription plane routes
 router.post('/plane',authMiddleware,createPlane)
